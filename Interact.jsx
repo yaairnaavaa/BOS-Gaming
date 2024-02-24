@@ -1,5 +1,7 @@
+// Smart contract address
 const virtualPetContract = "0xc533FCB43DEf76ac1A175Ee6beB0Ad7d39469220";
 
+// Obtaining the ABI with the list of methods available in the contract
 const virtualPetAbi = fetch(
   "https://raw.githubusercontent.com/cloudmex/burritobattle-pet/main/ABI.txt"
 );
@@ -8,8 +10,10 @@ if (!virtualPetAbi.ok) {
   return "Loading";
 }
 
+// Interface creation using ethers and ABI
 const iface = new ethers.utils.Interface(virtualPetAbi.body);
 
+// State init
 State.init({
   inputTokenId: 0,
   tokenId: 0,
@@ -19,6 +23,7 @@ State.init({
   pet: null,
 });
 
+// Verify that we are login
 if (state.sender === undefined) {
   const accounts = Ethers.send("eth_requestAccounts", []);
   if (accounts.length) {
@@ -26,6 +31,7 @@ if (state.sender === undefined) {
   }
 }
 
+// Method to get user account
 const getSender = () => {
   return !state.sender
     ? ""
@@ -34,6 +40,7 @@ const getSender = () => {
         state.sender.substring(state.sender.length - 4, state.sender.length);
 };
 
+// We make the conversion of information from the NFT
 const _castData = (data) => {
   return {
     tokenId: data[0],
@@ -50,16 +57,20 @@ const _castData = (data) => {
   };
 };
 
+// Method to get NFT information
 const getNft = () => {
   State.update({
     tokenId: state.inputTokenId,
   });
+
+  // We initialize the contract with ethers and put into use the contract, the ABI and the account that will sign the transactions
   const contract = new ethers.Contract(
     virtualPetContract,
     virtualPetAbi.body,
     Ethers.provider().getSigner()
   );
 
+  // We call the getTokenInfoById method to query the NFT information by its Id
   contract.getTokenInfoById(state.inputTokenId).then((res) => {
     if (res[1] == 0) {
       State.update({
@@ -72,6 +83,7 @@ const getNft = () => {
       });
     }
     if (res[1] == 2) {
+      // We change the format of the information obtained from the contract
       const petInfo = [res].map(_castData);
       State.update({
         firstSearch: false,
@@ -85,6 +97,7 @@ const getNft = () => {
   });
 };
 
+// Methods to obtain the NFT image depending on its status
 const _getCurrentImg = (petInfo) => {
   if (petInfo.isHungry) {
     return _getIsHungryImg(petInfo.image);
@@ -174,6 +187,7 @@ const _getIsSleepyImg = (img) => {
   }
 };
 
+// Method to play
 const play = () => {
   const contract = new ethers.Contract(
     virtualPetContract,
@@ -185,17 +199,10 @@ const play = () => {
       isBusy: true,
       isPlay: true,
     });
-    // State.update({
-    //   currentImg: _getPlayImg(state.pet.image),
-    //   isBusy: true,
-    //   isPlay: true,
-    // });
-    // setTimeout(() => {
-    //   getNft();
-    // }, "20000");
   });
 };
 
+// Method to eat
 const eat = () => {
   const contract = new ethers.Contract(
     virtualPetContract,
@@ -214,6 +221,7 @@ const eat = () => {
   });
 };
 
+// Method to sleep
 const sleep = () => {
   const contract = new ethers.Contract(
     virtualPetContract,
@@ -232,6 +240,7 @@ const sleep = () => {
   });
 };
 
+// Method to back menu
 const back = () => {
   State.update({
     tokenId: 0,
@@ -239,15 +248,18 @@ const back = () => {
   });
 };
 
+// Method to select random game
 const getGame = () => {
   return Math.floor(Math.random() * 2);
 };
 
+// Méthod to finish playing
 const onFinish = () => {
   State.update({ isPlay: false });
   getNft();
 };
 
+// Definition of all styles used in the component
 const ItemBackground = styled.div`
         width: 100%;
         //height: 100vh;
@@ -398,6 +410,8 @@ if (!state.theme) {
 }
 const Theme = state.theme;
 
+// Render of the component where the necessary methods to interact with the NFT are called
+// along with the implementation of each of the previously defined styles.
 return (
   <Theme>
     <ItemBackground>
