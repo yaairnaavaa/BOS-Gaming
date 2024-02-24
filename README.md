@@ -76,6 +76,8 @@ const play = () => {
 };
 ```
 
+![Play](https://drive.google.com/uc?id=1geax6MzEKyPqrnJO5RQdel4V84xOWJxR)
+
 Eat:
 
 ```jsx
@@ -99,6 +101,8 @@ const eat = () => {
   });
 };
 ```
+
+![Eat](https://drive.google.com/uc?id=13ptJzTIzHr14b3E45w204NathGljjUYC)
 
 Sleep:
 
@@ -124,5 +128,7 @@ const sleep = () => {
 };
 ```
 
-BOS Widget Interact: https://near.org/owa-is-bos.near/widget/BOS-Gaming-Burrito-Mint
+![Sleep](https://drive.google.com/uc?id=1HB8gUR5OQl8nA3FYHTQAKcM1rQ6S-gmA)
+
+BOS Widget Interact: https://near.org/owa-is-bos.near/widget/BOS-Gaming-Burrito-Mint <br/>
 BOS Widget Interact: https://near.org/owa-is-bos.near/widget/BOS-Gaming-Burrito-Interact
