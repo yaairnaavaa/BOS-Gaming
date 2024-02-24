@@ -1,5 +1,7 @@
-const virtualPetContract = "0xc533FCB43DEf76ac1A175Ee6beB0Ad7d39469220";
+// Smart contract address
+const virtualPetContract = "0xE3B4cf554EA9113fbbF0715309ce87165024901E";
 
+// Obtaining the ABI with the list of methods available in the contract
 const virtualPetAbi = fetch(
   "https://raw.githubusercontent.com/cloudmex/burritobattle-pet/main/ABI.txt"
 );
@@ -8,8 +10,10 @@ if (!virtualPetAbi.ok) {
   return "Loading";
 }
 
+// Interface creation using ethers and ABI
 const iface = new ethers.utils.Interface(virtualPetAbi.body);
 
+// State init
 State.init({
   init: true,
   mintedBurritos: 0,
@@ -17,6 +21,7 @@ State.init({
   minting: false,
 });
 
+// Verify that we are login
 if (state.sender === undefined) {
   const accounts = Ethers.send("eth_requestAccounts", []);
   if (accounts.length) {
@@ -25,14 +30,13 @@ if (state.sender === undefined) {
 }
 
 if (state.sender && state.init) {
-  console.log("getMintedTokens()");
   const contract = new ethers.Contract(
     virtualPetContract,
     virtualPetAbi.body,
     Ethers.provider().getSigner()
   );
 
-  // Consultar mascotas minadas
+  // Method to get minted NFTs
   contract.getMintedTokens().then((res) => {
     State.update({
       mintedBurritos: res.toNumber(),
@@ -40,14 +44,16 @@ if (state.sender && state.init) {
   });
 }
 
-// Mint
+// Method to mint
 const mint = () => {
+  // We initialize the contract with ethers and put into use the contract, the ABI and the account that will sign the transactions
   const contract = new ethers.Contract(
     virtualPetContract,
     virtualPetAbi.body,
     Ethers.provider().getSigner()
   );
 
+  // We call the mintPet method
   contract.mintPet(state.burritoName).then((res) => {
     const lastId = (state.mintedBurritos += 1);
     State.update({
@@ -59,7 +65,6 @@ const mint = () => {
     setTimeout(() => {
       contract.getMintedTokens().then((res) => {
         State.update({
-          //mintedBurritos: res.toNumber(),
           minting: false,
         });
       });
@@ -67,6 +72,7 @@ const mint = () => {
   });
 };
 
+// Definition of all styles used in the component
 const ItemBackground = styled.div`
         width: 100%;
         //height: 100vh;
@@ -173,7 +179,8 @@ if (!state.theme) {
 }
 const Theme = state.theme;
 
-// Render
+// Render of the component where the necessary method to mint a new NFT is called 
+// along with the implementation of each of the previously defined styles.
 return (
   <Theme>
     <ItemBackground>
