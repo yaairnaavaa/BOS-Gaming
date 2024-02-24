@@ -15,7 +15,113 @@ All the statistics will be stored in the smart contract from where we will also 
 The main configurations and methods to be called from BOS to successfully run this game will be shown below:
 
 ```jsx
+// Smart contract address
+const virtualPetContract = "0xE3B4cf554EA9113fbbF0715309ce87165024901E";
 
+// Obtaining the ABI with the list of methods available in the contract
+const virtualPetAbi = fetch(
+  "https://raw.githubusercontent.com/cloudmex/burritobattle-pet/main/ABI.txt"
+);
+```
+
+Mint:
+
+```jsx
+const mint = () => {
+  // We initialize the contract with ethers.Contract and put into use the contract, the ABI and the account that will sign the transactions
+  const contract = new ethers.Contract(
+    virtualPetContract,
+    virtualPetAbi.body,
+    Ethers.provider().getSigner()
+  );
+
+  // We call the mintPet method
+  contract.mintPet(state.burritoName).then((res) => {
+    const lastId = (state.mintedBurritos += 1);
+    State.update({
+      init: false,
+      burritoName: "",
+      mintedBurritos: lastId,
+      minting: true,
+    });
+    setTimeout(() => {
+      contract.getMintedTokens().then((res) => {
+        State.update({
+          minting: false,
+        });
+      });
+    }, "20000");
+  });
+};
+```
+
+Play:
+
+```jsx
+const play = () => {
+  // We initialize the contract with ethers.Contract and put into use the contract, the ABI and the account that will sign the transactions
+  const contract = new ethers.Contract(
+    virtualPetContract,
+    virtualPetAbi.body,
+    Ethers.provider().getSigner()
+  );
+
+  // We call the play method
+  contract.play(state.tokenId).then((res) => {
+    State.update({
+      isBusy: true,
+      isPlay: true,
+    });
+  });
+};
+```
+
+Eat:
+
+```jsx
+const eat = () => {
+  // We initialize the contract with ethers.Contract and put into use the contract, the ABI and the account that will sign the transactions
+  const contract = new ethers.Contract(
+    virtualPetContract,
+    virtualPetAbi.body,
+    Ethers.provider().getSigner()
+  );
+
+  // We call the eat method
+  contract.eat(state.tokenId).then((res) => {
+    State.update({
+      currentImg: _getEatImg(state.pet.image),
+      isBusy: true,
+    });
+    setTimeout(() => {
+      getNft();
+    }, "20000");
+  });
+};
+```
+
+Sleep:
+
+```jsx
+const sleep = () => {
+  // We initialize the contract with ethers.Contract and put into use the contract, the ABI and the account that will sign the transactions
+  const contract = new ethers.Contract(
+    virtualPetContract,
+    virtualPetAbi.body,
+    Ethers.provider().getSigner()
+  );
+
+  // We call the doze method
+  contract.doze(state.tokenId).then((res) => {
+    State.update({
+      currentImg: _getSleepImg(state.pet.image),
+      isBusy: true,
+    });
+    setTimeout(() => {
+      getNft();
+    }, "20000");
+  });
+};
 ```
 
 BOS Widget Interact: https://near.org/owa-is-bos.near/widget/BOS-Gaming-Burrito-Mint
