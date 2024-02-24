@@ -130,5 +130,5 @@ const sleep = () => {
 
 ![Sleep](https://drive.google.com/uc?id=1HB8gUR5OQl8nA3FYHTQAKcM1rQ6S-gmA)
 
-BOS Widget Interact: https://near.org/owa-is-bos.near/widget/BOS-Gaming-Burrito-Mint <br/>
-BOS Widget Interact: https://near.org/owa-is-bos.near/widget/BOS-Gaming-Burrito-Interact
+BOS Widget Interact: https://near.social/owa-is-bos.near/widget/BOS-Gaming-Burrito-Mint <br/>
+BOS Widget Interact: https://near.social/owa-is-bos.near/widget/BOS-Gaming-Burrito-Interact
