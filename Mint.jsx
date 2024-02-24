@@ -1,9 +1,9 @@
-// Smart contract address
-const virtualPetContract = "0xE3B4cf554EA9113fbbF0715309ce87165024901E";
+// Smart contract address (Aurora testnet)
+const virtualPetContract = "0x363a236ABea6c7d89F3E3E1A1E02C100E6FFAAF7";
 
 // Obtaining the ABI with the list of methods available in the contract
 const virtualPetAbi = fetch(
-  "https://raw.githubusercontent.com/cloudmex/burritobattle-pet/main/ABI.txt"
+  "https://raw.githubusercontent.com/cloudmex/burritobattle-pet/main/ABI3.txt"
 );
 
 if (!virtualPetAbi.ok) {
@@ -179,7 +179,7 @@ if (!state.theme) {
 }
 const Theme = state.theme;
 
-// Render of the component where the necessary method to mint a new NFT is called 
+// Render of the component where the necessary method to mint a new NFT is called
 // along with the implementation of each of the previously defined styles.
 return (
   <Theme>
