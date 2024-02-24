@@ -1,9 +1,9 @@
-// Smart contract address
-const virtualPetContract = "0xc533FCB43DEf76ac1A175Ee6beB0Ad7d39469220";
+// Smart contract address (Aurora Testnet)
+const virtualPetContract = "0x363a236ABea6c7d89F3E3E1A1E02C100E6FFAAF7";
 
 // Obtaining the ABI with the list of methods available in the contract
 const virtualPetAbi = fetch(
-  "https://raw.githubusercontent.com/cloudmex/burritobattle-pet/main/ABI.txt"
+  "https://raw.githubusercontent.com/cloudmex/burritobattle-pet/main/ABI3.txt"
 );
 
 if (!virtualPetAbi.ok) {
@@ -42,18 +42,18 @@ const getSender = () => {
 
 // We make the conversion of information from the NFT
 const _castData = (data) => {
+  console.log(data);
   return {
     tokenId: data[0],
-    status: data[1],
-    image: data[2],
-    name: data[3],
-    happiness: data[4].toNumber(),
-    hunger: data[5].toNumber(),
-    sleep: data[6].toNumber(),
-    currentActivity: data[7],
-    isHungry: data[8],
-    isSleepy: data[9],
-    isBored: data[10],
+    image: data[1],
+    name: data[2],
+    happiness: data[3].toNumber(),
+    hunger: data[4].toNumber(),
+    sleep: data[5].toNumber(),
+    currentActivity: data[6],
+    isHungry: data[7],
+    isSleepy: data[8],
+    isBored: data[9],
   };
 };
 
@@ -72,17 +72,13 @@ const getNft = () => {
 
   // We call the getTokenInfoById method to query the NFT information by its Id
   contract.getTokenInfoById(state.inputTokenId).then((res) => {
-    if (res[1] == 0) {
+    console.log(res);
+    if (!res[1]) {
       State.update({
-        error: "Burrito's ID doesn't exist",
+        error: "Burrito's ID doesn't exist or You don't own the Burrito",
       });
     }
-    if (res[1] == 1) {
-      State.update({
-        error: "You don't own the Burrito",
-      });
-    }
-    if (res[1] == 2) {
+    if (res[1]) {
       // We change the format of the information obtained from the contract
       const petInfo = [res].map(_castData);
       State.update({
