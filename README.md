@@ -190,11 +190,11 @@ Once this is done, you can click **Connect with Web3** to run metamask and conne
 
 This process will be necessary to execute both components, once metamask is connected we will be able to start interacting with the UI and start playing.
 
-The first thing to do is to get a new Burrito from the Mint Component.
+The first thing to do is to get a new Burrito from the Mint Component. We just enter the name we want our Burrito to have and click on **Mint Burrito** to launch Metamask and send the transaction.
 
 <img src="https://drive.google.com/uc?id=1E1sRLyKBBG9r5lphXLDsi7vyqq2t3b8F" width="50%">
 
-The identifiers of the Burritos are consecutive, so the last id of the counter will be that of the Burrito we have just minted and which we will have to enter in the second component to start interacting.
+The identifiers of the Burritos are consecutive, so the last id of the counter will be that of the Burrito we have just minted and which we will have to enter in the second component to start interacting. From here we can make our Burrito play, eat or sleep.
 
 <img src="https://drive.google.com/uc?id=11U4zbbZGWiRkULVcZuf-6w5ce3gGDEPI" width="50%">
 
