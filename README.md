@@ -4,7 +4,7 @@ This repository is an example of how to create a game in BOS using any blockchai
 
 This game is a tamagotchi with a Burrito theme where you can mint new NFT and interact with them with the possibility to play, feed them and make them sleep.
 
-![Burrito](https://drive.google.com/uc?id=1ix6w76D6P4wmovlnSAaehrK59qqCKgB1)
+<img src="https://drive.google.com/uc?id=1ix6w76D6P4wmovlnSAaehrK59qqCKgB1" width="50%">
 
 ## How to implement the game in BOS?
 
@@ -12,8 +12,9 @@ A simple way to implement this type of games in BOS is by using animated images,
 
 All the statistics will be stored in the smart contract from where we will also be retrieving the information from the NFTs and sending to update the information after performing any action.
 
-The main configurations and methods to be called from BOS to successfully run this game will be shown below:
+The main configurations and methods to be called from BOS to successfully run this game will be shown below.
 
+The following lines of code show the constants with the respective addresses of the smart contract and the ABI containing the available methods of the contract used for this game.
 ```jsx
 // Smart contract address
 const virtualPetContract = "0xE3B4cf554EA9113fbbF0715309ce87165024901E";
@@ -24,7 +25,7 @@ const virtualPetAbi = fetch(
 );
 ```
 
-Mint:
+**Mint**: This is the method used to mint a new Burrito, as we can see this method only receives one parameter which is the name of the Burrito, once the smart contract method is called to mint the new NFT we proceed to call a second method to query the amount of Burritos minted and display this counter in the user interface.
 
 ```jsx
 const mint = () => {
@@ -55,7 +56,50 @@ const mint = () => {
 };
 ```
 
-Play:
+<img src="https://drive.google.com/uc?id=1PrTHQP1pQ6LtoKG4VXGUnyARFzlvuDLW" width="50%">
+
+
+**Get Burrito**: This method is used to obtain the information of one of our previously minted Burritos, it only receives as parameter the ID of the Burrito to obtain and after retrieving the information from the smart contract it gives the necessary format and stores it in the state of the component.
+
+```jsx
+const getNft = () => {
+  State.update({
+    tokenId: state.inputTokenId,
+  });
+
+  // We initialize the contract with ethers and put into use the contract, the ABI and the account that will sign the transactions
+  const contract = new ethers.Contract(
+    virtualPetContract,
+    virtualPetAbi.body,
+    Ethers.provider().getSigner()
+  );
+
+  // We call the getTokenInfoById method to query the NFT information by its Id
+  contract.getTokenInfoById(state.inputTokenId).then((res) => {
+    if (!res[1]) {
+      State.update({
+        error: "Burrito's ID doesn't exist or You don't own the Burrito",
+      });
+    }
+    if (res[1]) {
+      // We change the format of the information obtained from the contract
+      const petInfo = [res].map(_castData);
+      State.update({
+        firstSearch: false,
+        pet: petInfo[0],
+        currentActivity: petInfo[0].currentActivity,
+        currentImg: _getCurrentImg(petInfo[0]),
+        isBusy: false,
+        error: "",
+      });
+    }
+  });
+};
+```
+
+<img src="https://drive.google.com/uc?id=1vEYy2MZG4AGZaIQQ_cFjxr3fzdqPfB4S" width="50%">
+
+**Play**: This is the method used to play with our Burrito and which only receives as a parameter the ID of the Burrito we will play with (internally the smart contract makes the modifications of the Burrito's statistics).
 
 ```jsx
 const play = () => {
@@ -76,9 +120,9 @@ const play = () => {
 };
 ```
 
-![Play](https://drive.google.com/uc?id=1geax6MzEKyPqrnJO5RQdel4V84xOWJxR)
+<img src="https://drive.google.com/uc?id=1geax6MzEKyPqrnJO5RQdel4V84xOWJxR" width="50%">
 
-Eat:
+**Eat**: This is the method used to feed our Burrito and only receives as parameter the ID of the Burrito we are going to feed.
 
 ```jsx
 const eat = () => {
@@ -102,9 +146,9 @@ const eat = () => {
 };
 ```
 
-![Eat](https://drive.google.com/uc?id=13ptJzTIzHr14b3E45w204NathGljjUYC)
+<img src="https://drive.google.com/uc?id=13ptJzTIzHr14b3E45w204NathGljjUYC" width="50%">
 
-Sleep:
+**Sleep**: This is the method used to put our Burrito to sleep and like the previous methods it only receives as parameter the ID of the Burrito.
 
 ```jsx
 const sleep = () => {
@@ -128,12 +172,33 @@ const sleep = () => {
 };
 ```
 
-![Sleep](https://drive.google.com/uc?id=1HB8gUR5OQl8nA3FYHTQAKcM1rQ6S-gmA)
+<img src="https://drive.google.com/uc?id=1HB8gUR5OQl8nA3FYHTQAKcM1rQ6S-gmA" width="50%">
 
 ## How to test the Component?
 
+To run this project in BOS you must run both widgets (Mint.jsx and Interact.jsx) on an available BOS gateway, for example: [near.social ](https://near.social/edit)
+
+Once the code for both widgets has been added we can render it by clicking on the preview button to render the component.
+
+<img src="https://drive.google.com/uc?id=1ijRT8cM4MwtDDA592xk80mVlNEqGEuxY" width="50%">
+
+For this example you will also need to have installed and configured [metamask](https://metamask.io/) and the [Aurora test network](https://aurora.dev/faucet).
+
+Once this is done, you can click **Connect with Web3** to run metamask and connect the component to your account.
+
+<img src="https://drive.google.com/uc?id=12Vp3p8SHzJCPZFJd6SsyiGaB1e2WB90i" width="50%">
+
+This process will be necessary to execute both components, once metamask is connected we will be able to start interacting with the UI and start playing.
+
+The first thing to do is to get a new Burrito from the Mint Component.
+
+<img src="https://drive.google.com/uc?id=1E1sRLyKBBG9r5lphXLDsi7vyqq2t3b8F" width="50%">
+
+The identifiers of the Burritos are consecutive, so the last id of the counter will be that of the Burrito we have just minted and which we will have to enter in the second component to start interacting.
+
+<img src="https://drive.google.com/uc?id=11U4zbbZGWiRkULVcZuf-6w5ce3gGDEPI" width="50%">
 
 ## BOS Widgets
 
-BOS Widget Mint: https://near.social/owa-is-bos.near/widget/BOS-Gaming-Burrito-Mint <br/>
-BOS Widget Interact: https://near.social/owa-is-bos.near/widget/BOS-Gaming-Burrito-Interact
+Mint: https://near.social/owa-is-bos.near/widget/BOS-Gaming-Burrito-Mint <br/>
+Interact: https://near.social/owa-is-bos.near/widget/BOS-Gaming-Burrito-Interact
